@@ -113,7 +113,7 @@ class YouTube:
                 if self.retry > self.MAX_RETRIES:
                     raise MaxRetryExceeded("No longer attempting to retry.")
 
-                max_sleep = 2 ** self.retry
+                max_sleep = 2**self.retry
                 sleep_seconds = random.random() * max_sleep
 
                 log.debug(

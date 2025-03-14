@@ -1,20 +1,12 @@
-import asyncio
-import io
-import math
-import os
 import shutil
-import sys
 import time
-import traceback
 import logging
-import datetime
 import psutil
 
 from ..config import Config
 from ..utubebot import UtubeBot
-from ..translations import Messages as tr
 from pyrogram import filters as Filters
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from pyrogram.types import Message
 from ..helpers.database import db
 
 log = logging.getLogger(__name__)
@@ -38,11 +30,11 @@ async def stats_message_fn(c: UtubeBot, m: Message):
     sent = humanbytes(psutil.net_io_counters().bytes_sent)
     recv = humanbytes(psutil.net_io_counters().bytes_recv)
     total_users = await db.total_users_count()
-    uptime = time.strftime("%Hh%Mm%Ss", time.gmtime(time.time() - Config.BOT_UPTIME))    
+    uptime = time.strftime("%Hh%Mm%Ss", time.gmtime(time.time() - Config.BOT_UPTIME))
     start_t = time.time()
     end_t = time.time()
     time_taken_s = (end_t - start_t) * 1000
-    
+
     msg = (
         f"<b>Bot Current Status</b>\n\n"
         f"<b>Restarted on {restart_time}</b>\n"
@@ -55,10 +47,8 @@ async def stats_message_fn(c: UtubeBot, m: Message):
         f"<b>Downloaded Data:</b> {recv} 🔻\n"
         f"<b>Uploaded Data:</b> {sent} 🔺\n\n"
     )
-    await m.reply_text(
-        text=msg,
-        quote=True
-    )
+    await m.reply_text(text=msg, quote=True)
+
 
 def humanbytes(size):
     # https://stackoverflow.com/a/49361727/4723940
@@ -72,6 +62,7 @@ def humanbytes(size):
         size /= power
         n += 1
     return str(round(size, 2)) + " " + Dic_powerN[n] + "B"
+
 
 def up_time(time_taken):
     hours, _hour = divmod(time_taken, 3600)
